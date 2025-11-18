@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doña Marta Rotisería - San Luis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #c83737;
+            color: #2a2a2a;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #c83737 0%, #c23838 100%);
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 5px solid #f4a641;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+        }
+
+        .header-text {
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-container {
+            background: rgba(42, 42, 42, 0.95);
+            padding: 1.2rem;
+            margin: 0;
+            max-width: 100%;
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-bottom: 4px solid #f4a641;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #f4a641 rgba(42, 42, 42, 0.5);
+        }
+
+        .filter-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .filter-container::-webkit-scrollbar-track {
+            background: rgba(42, 42, 42, 0.5);
+        }
+
+        .filter-container::-webkit-scrollbar-thumb {
+            background: #f4a641;
+            border-radius: 3px;
+        }
+
+        .filter-btn {
+            background: #f4a641;
+            border: 3px solid #2a2a2a;
+            color: #2a2a2a;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            white-space: nowrap;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-btn:hover {
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .filter-btn.active {
+            background: #c83737;
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 1rem;
+        }
+
+        .category {
+            background: #fff;
+            border: 5px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .category.hidden {
+            display: none;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 4px solid #f4a641;
+        }
+
+        .category-title {
+            font-family: 'Alfa Slab One', cursive;
+            font-size: 3rem;
+            color: #c83737;
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #f4a641;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: #fff9e6;
+            border: 4px solid #2a2a2a;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px) rotate(-1deg);
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .item-image-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 4px solid #2a2a2a;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.4s ease;
+        }
+
+        .menu-item:hover .item-image {
+            transform: scale(1.1);
+        }
+
+        .item-content {
+            padding: 1.5rem;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .item-name {
+            font-size: 1.3rem;
+            color: #2a2a2a;
+            font-weight: 900;
+            flex: 1;
+            text-transform: uppercase;
+        }
+
+        .item-price {
+            font-family: 'Alfa Slab One', cursive;
+            font-size: 1.6rem;
+            color: #c83737;
+            font-weight: 400;
+            white-space: nowrap;
+            background: #f4a641;
+            padding: 0.3rem 0.8rem;
+            border-radius: 10px;
+            border: 3px solid #2a2a2a;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .item-description {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .promo-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f4a641;
+            color: #2a2a2a;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+            border: 3px solid #2a2a2a;
+            border-radius: 10px;
+            box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+            transform: rotate(-5deg);
+        }
+
+        .location-section {
+            background: #fff;
+            border: 5px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .location-title {
+            font-family: 'Alfa Slab One', cursive;
+            font-size: 2.5rem;
+            color: #c83737;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .location-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2a2a2a;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .location-info p {
+            margin-bottom: 0.8rem;
+        }
+
+        .location-info i {
+            color: #c83737;
+            margin-right: 0.5rem;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border: 4px solid #2a2a2a;
+            border-radius: 15px;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 75px;
+            height: 75px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+            border: 4px solid #2a2a2a;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .whatsapp-float i {
+            color: #fff;
+            font-size: 2.8rem;
+        }
+
+        footer {
+            background: #2a2a2a;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            color: #fff;
+            border-top: 5px solid #f4a641;
+        }
+
+        footer p {
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .footer-icon {
+            color: #f4a641;
+            margin: 0 0.5rem;
+        }
+
+        .social-links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .social-links a {
+            color: #f4a641;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+            transform: translateY(-3px) rotate(5deg);
+        }
+
+        @media (max-width: 768px) {
+            .logo-img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .category-title {
+                font-size: 2.3rem;
+            }
+
+            .category {
+                padding: 1.5rem;
+                border-radius: 15px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-container {
+                padding: 1rem;
+                gap: 0.6rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.75rem;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .whatsapp-float {
+                width: 65px;
+                height: 65px;
+                bottom: 22px;
+                right: 22px;
+            }
+
+            .whatsapp-float i {
+                font-size: 2.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo-img {
+                width: 130px;
+                height: 130px;
+            }
+
+            .container {
+                padding: 2rem 0.75rem;
+            }
+
+            .category {
+                padding: 1.25rem;
+            }
+
+            .category-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="./donamarta-logo.png" alt="Doña Marta Rotisería" class="logo-img">
+            <p class="header-text">Las mejores comidas caseras de San Luis</p>
+        </div>
+    </header>
+
+    <div class="filter-container">
+        <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-list"></i> Todos
+        </button>
+        <button class="filter-btn" data-filter="pizzas">
+            <i class="fas fa-pizza-slice"></i> Pizzas
+        </button>
+        <button class="filter-btn" data-filter="empanadas">
+            <i class="fas fa-pie-chart"></i> Empanadas
+        </button>
+        <button class="filter-btn" data-filter="sandwiches">
+            <i class="fas fa-hamburger"></i> Sandwiches
+        </button>
+        <button class="filter-btn" data-filter="pollos">
+            <i class="fas fa-drumstick-bite"></i> Pollos
+        </button>
+        <button class="filter-btn" data-filter="milanesas">
+            <i class="fas fa-utensils"></i> Milanesas
+        </button>
+    </div>
+
+    <div class="container">
+        <div class="category" data-category="pizzas">
+            <div class="category-header">
+                <div class="category-icon"><i class="fas fa-pizza-slice"></i></div>
+                <h2 class="category-title">Pizzas</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600" alt="Pizza Muzzarella" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Muzzarella</div>
+                            <div class="item-price">$7.500</div>
+                        </div>
+                        <div class="item-description">Pizza clásica con salsa de tomate y muzzarella</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <div class="promo-badge"><i class="fas fa-fire"></i> Promo</div>
+                        <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?w=600" alt="Pizza Napolitana" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Napolitana</div>
+                            <div class="item-price">$8.200</div>
+                        </div>
+                        <div class="item-description">Muzzarella, tomate fresco, ajo y albahaca</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600" alt="Pizza Especial" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Especial</div>
+                            <div class="item-price">$9.500</div>
+                        </div>
+                        <div class="item-description">Muzzarella, jamón, morrones, aceitunas y huevo</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600" alt="Pizza Fugazzeta" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Fugazzeta</div>
+                            <div class="item-price">$8.800</div>
+                        </div>
+                        <div class="item-description">Muzzarella, cebolla y oreganato</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=600" alt="Pizza Calabresa" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Calabresa</div>
+                            <div class="item-price">$9.200</div>
+                        </div>
+                        <div class="item-description">Muzzarella, longaniza calabresa y aceitunas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category" data-category="empanadas">
+            <div class="category-header">
+                <div class="category-icon"><i class="fas fa-pie-chart"></i></div>
+                <h2 class="category-title">Empanadas</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <div class="promo-badge"><i class="fas fa-star"></i> Populares</div>
+                        <img src="https://i.pinimg.com/1200x/82/04/2f/82042fc63db8ff8eda2015ee560fe54c.jpg" alt="Empanadas de Carne" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Carne x 12</div>
+                            <div class="item-price">$8.500</div>
+                        </div>
+                        <div class="item-description">Empanadas de carne cortada a cuchillo, cebolla y especias</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/736x/88/db/8e/88db8e51ecf1bf4a5657b82a236ecde5.jpg" alt="Empanadas de Jamón y Queso" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Jamón y Queso x 12</div>
+                            <div class="item-price">$7.800</div>
+                        </div>
+                        <div class="item-description">Clásicas empanadas de jamón y queso</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/736x/fd/8b/a6/fd8ba66329417a320b3a1c7b27e03866.jpg" alt="Empanadas de Pollo" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Pollo x 12</div>
+                            <div class="item-price">$8.200</div>
+                        </div>
+                        <div class="item-description">Pollo desmenuzado con verduras</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category" data-category="sandwiches">
+            <div class="category-header">
+                <div class="category-icon"><i class="fas fa-hamburger"></i></div>
+                <h2 class="category-title">Sandwiches</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <div class="promo-badge"><i class="fas fa-crown"></i> Especial</div>
+                        <img src="https://i.pinimg.com/1200x/f6/97/29/f69729919b030d4f2a6cdcd905f02cc6.jpg" alt="Lomito Completo" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Lomito Completo</div>
+                            <div class="item-price">$10.500</div>
+                        </div>
+                        <div class="item-description">Lomo, lechuga, tomate, huevo, jamón, queso y papas fritas</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" alt="Hamburguesa" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Hamburguesa Completa</div>
+                            <div class="item-price">$9.200</div>
+                        </div>
+                        <div class="item-description">Carne 200g, lechuga, tomate, queso, huevo y papas</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/736x/40/fc/72/40fc726503fac1ddc7966c8948f5152a.jpg" alt="Choripán" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Choripán</div>
+                            <div class="item-price">$4.500</div>
+                        </div>
+                        <div class="item-description">Chorizo casero en pan francés con chimichurri</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/1200x/17/0c/2e/170c2ef918f22e93fbd7475ba19c9125.jpg" alt="Lomito Simple" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Lomito Simple</div>
+                            <div class="item-price">$7.800</div>
+                        </div>
+                        <div class="item-description">Lomo con lechuga y tomate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category" data-category="pollos">
+            <div class="category-header">
+                <div class="category-icon"><i class="fas fa-drumstick-bite"></i></div>
+                <h2 class="category-title">Pollos Asados</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <div class="promo-badge"><i class="fas fa-fire"></i> Recomendado</div>
+                        <img src="https://images.unsplash.com/photo-1594221708779-94832f4320d1?w=600" alt="Pollo Entero" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Pollo Entero</div>
+                            <div class="item-price">$9.500</div>
+                        </div>
+                        <div class="item-description">Pollo asado al espiedo con ensalada</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?w=600" alt="Medio Pollo" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Medio Pollo</div>
+                            <div class="item-price">$5.200</div>
+                        </div>
+                        <div class="item-description">Medio pollo asado con guarnición</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=600" alt="Cuarto de Pollo" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Cuarto de Pollo</div>
+                            <div class="item-price">$3.200</div>
+                        </div>
+                        <div class="item-description">Cuarto de pollo con papas fritas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="category" data-category="milanesas">
+            <div class="category-header">
+                <div class="category-icon"><i class="fas fa-utensils"></i></div>
+                <h2 class="category-title">Milanesas</h2>
+            </div>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/736x/cb/f0/d4/cbf0d46001ac120dd742fef9754fc4fc.jpg" alt="Milanesa de Pollo" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">De Pollo</div>
+                            <div class="item-price">$7.800</div>
+                        </div>
+                        <div class="item-description">Milanesa de pollo con guarnición a elección</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <div class="promo-badge"><i class="fas fa-star"></i> Popular</div>
+                        <img src="https://i.pinimg.com/1200x/9d/10/eb/9d10ebdfc474e6d12ce53591a2274450.jpg" alt="Milanesa Napolitana" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Napolitana</div>
+                            <div class="item-price">$9.800</div>
+                        </div>
+                        <div class="item-description">Con jamón, muzzarella, salsa de tomate y papas fritas</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/1200x/d6/e6/4f/d6e64f1119a7decb045f682baba3cbec.jpg" alt="Milanesa de Carne" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">De Carne</div>
+                            <div class="item-price">$8.500</div>
+                        </div>
+                        <div class="item-description">Con papas fritas y ensalada</div>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="item-image-container">
+                        <img src="https://i.pinimg.com/736x/b9/61/94/b96194c099d5b8e1402f40ee4af62da3.jpg" alt="Milanesa con Puré" class="item-image">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-header">
+                            <div class="item-name">Con Puré</div>
+                            <div class="item-price">$8.200</div>
+                        </div>
+                        <div class="item-description">Milanesa de carne con puré de papas casero</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="location-section">
+            <h2 class="location-title">¡Visitanos!</h2>
+            <div class="location-info">
+                <p><i class="fas fa-map-pin"></i> San Luis, Argentina</p>
+                <p><i class="fas fa-clock"></i> Lun a Dom: 11:00 a 15:00 | 19:00 a 00:00</p>
+                <p><i class="fas fa-phone"></i> +54 266 400-0000</p>
+            </div>
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3348.6749082089747!2d-66.35012452383844!3d-33.29971877341698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95d43e87f42d1e55%3A0x2b6d5b0b64b0c8b0!2sSan%20Luis%2C%20Argentina!5e0!3m2!1ses!2sus!4v1699999999999!5m2!1ses!2sus"
+                    width="100%" 
+                    height="100%" 
+                    style="border:0;" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/5492664000000?text=Hola,%20quiero%20hacer%20un%20pedido%20en%20Doña%20Marta" 
+       class="whatsapp-float" 
+       target="_blank"
+       title="Hace tu pedido por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p><i class="fas fa-clock footer-icon"></i> Lun a Dom: 11:00 a 15:00 | 19:00 a 00:00</p>
+        <p><i class="fas fa-phone footer-icon"></i> Teléfono: +54 266 400-0000</p>
+        <p><i class="fas fa-map-marker-alt footer-icon"></i> San Luis, Argentina</p>
+        
+        <div class="social-links">
+            <a href="https://www.instagram.com/donamartarotiseria" target="_blank" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.facebook.com/donamartarotiseria" target="_blank" title="Facebook">
+                <i class="fab fa-facebook"></i>
+            </a>
+        </div>
+        
+        <p style="margin-top: 2rem; font-size: 0.7rem; color: #f4a641;">Doña Marta Rotisería © 2025 - Las mejores comidas caseras</p>
+    </footer>
+
+    <script>
+        // Funcionalidad de filtrado por categorías
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const categories = document.querySelectorAll('.category');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remover clase active de todos los botones
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Agregar clase active al botón clickeado
+                button.classList.add('active');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                // Mostrar/ocultar categorías según el filtro
+                categories.forEach(category => {
+                    if (filterValue === 'all') {
+                        category.classList.remove('hidden');
+                    } else {
+                        if (category.getAttribute('data-category') === filterValue) {
+                            category.classList.remove('hidden');
+                        } else {
+                            category.classList.add('hidden');
+                        }
+                    }
+                });
+                
+                // Scroll suave hacia el inicio del contenedor
+                window.scrollTo({
+                    top: document.querySelector('.filter-container').offsetTop - 10,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
